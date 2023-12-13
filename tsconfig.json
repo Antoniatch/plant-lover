@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "outDir": "dist",
+
+    // Apollo Server additional config
+    "rootDir": "src",
+    "types": ["node"],
+
+    // Minimal configuration for Type GraphQL
+    "module": "ESNext",
+    "target": "es2021",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+
+    // ESLint
+    "strictNullChecks": true
+  },
+  "lib": ["es2021"]
+}
