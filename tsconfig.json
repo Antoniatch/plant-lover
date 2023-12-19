@@ -10,13 +10,15 @@
     "types": ["node"],
 
     // Minimal configuration for Type GraphQL
-    "module": "ESNext",
-    "target": "es2021",
+    "module": "CommonJS",
+    "target": "ESNext",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
 
     // ESLint
     "strictNullChecks": true
   },
-  "lib": ["es2021"]
+  "lib": ["es2021"],
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules"]
 }
