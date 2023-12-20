@@ -1,4 +1,5 @@
 import { Field, ObjectType } from "type-graphql";
+import { Size } from "./Size";
 
 @ObjectType()
 export class TrackingSheet {
@@ -8,12 +9,15 @@ export class TrackingSheet {
     @Field()
     userPlantId: string;
 
-    @Field(() => Date)
-    watering: string;
+    @Field(() => [Size])
+    sizes: Size[];
 
-    @Field(() => Date)
-    repotting: string;
+    @Field(() => [Date])
+    watering: string[];
 
-    @Field(() => Date)
-    pruning: string;
+    @Field(() => [Date])
+    repotting: string[];
+
+    @Field(() => [Date])
+    pruning: string[];
 }

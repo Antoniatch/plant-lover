@@ -1,5 +1,5 @@
 import { Field, ObjectType } from "type-graphql";
-import { Substrate } from "../enums";
+import { Substrate } from "@prisma/client";
 
 @ObjectType()
 export class Mix {

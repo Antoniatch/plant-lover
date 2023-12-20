@@ -1,0 +1,132 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Exposure {
+  DIRECT
+  INDIRECT
+  MI
+  OMBRE
+}
+
+enum Substrate {
+  TERREAU
+  TERRE
+  PERLITE
+  CAILLOUX
+}
+
+enum Environment {
+  OUTDOOR
+  INDOOR
+}
+
+enum Category {
+  FLEUR
+  BONSAI
+  BUISSON
+  ARBRE
+  SUCCULENTE
+  CACTUS
+}
+
+model User {
+  id  String @id @default(uuid())
+  name  String
+  password  String
+
+  userPlants UserPlant[]  
+}
+
+model Plant {
+  id  String  @id @default(uuid())
+  image String
+  name  String
+  category Category
+  watering  Float
+  exposure  Exposure[]
+  repotting Float
+  minTemperature  Float
+  maxTemperature  Float
+  environment Environment
+
+  family Family @relation(fields: [familyId], references: [id])
+  familyId  String
+
+  mixes Mix[]
+  userPlants UserPlant[]
+}
+
+model UserPlant {
+  id  String  @id @default(uuid())
+  image String?
+  nickname String?
+  birthday String?
+  watering Float?
+  exposure Exposure?
+  repotting Float?
+  environment Environment?
+
+  plant Plant @relation(fields: [plantId], references: [id])
+  plantId String
+  user User @relation(fields: [userId], references: [id])
+  userId String
+  mix Mix? @relation(fields: [mixId], references: [id])
+  mixId String?
+  observations Observation[]
+  trackingSheet TrackingSheet?
+}
+
+model Mix {
+  id  String  @id @default(uuid())
+  substrates Substrate[]
+
+  plants Plant[]
+  userPlants UserPlant[]
+}
+
+model Family {
+  id String @id @default(uuid())
+  name  String
+
+  plants Plant[]
+}
+
+model Observation {
+  id String @id @default(uuid())
+  date String
+  description String
+  image String?
+
+  userPlant UserPlant @relation(fields: [userPlantId], references: [id])
+  userPlantId String
+}
+
+model TrackingSheet {
+  id  String  @id @default(uuid())
+  watering String[]
+  repotting String[]
+  pruning String[]
+
+  userPlant UserPlant @relation(fields: [userPlantId], references: [id])
+  userPlantId String @unique
+
+  sizes Size[]
+}
+
+model Size {
+  id  String  @id @default(uuid())
+  date String
+  size Float
+
+  trackingSheet TrackingSheet @relation(fields: [trackingSheetId], references: [id])
+  trackingSheetId String
+}
