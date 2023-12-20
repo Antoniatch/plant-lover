@@ -1,13 +1,16 @@
 import { Field, ObjectType } from "type-graphql";
 
 @ObjectType()
-export class PlantMix {
+export class Size {
     @Field()
     id: string;
 
     @Field()
-    plantId: string;
+    trackingSheetId: string;
+
+    @Field(() => Date)
+    date: string;
 
     @Field()
-    mixId: string;
+    size: number;
 }

@@ -1,5 +1,4 @@
 import { Field, ObjectType } from "type-graphql";
-
 import { Environment, Exposure } from "../enums";
 
 import { Observation } from "./Observation";
@@ -18,26 +17,29 @@ export class UserPlant {
     @Field()
     trackingId: string;
 
-    @Field()
-    image: string;
+    @Field({ nullable: true })
+    mixId?: string;
 
-    @Field()
-    nickname: string;
+    @Field({ nullable: true })
+    image?: string;
 
-    @Field()
-    watering: number;
+    @Field({ nullable: true })
+    nickname?: string;
 
-    @Field(() => Exposure)
-    exposure: Exposure;
+    @Field(() => Date, { nullable: true })
+    birthday?: string;
 
-    @Field()
-    mixId: string;
+    @Field({ nullable: true })
+    watering?: number;
 
-    @Field()
-    repotting: number;
+    @Field(() => Exposure, { nullable: true })
+    exposure?: Exposure;
 
-    @Field(() => Environment)
-    environment: Environment;
+    @Field({ nullable: true })
+    repotting?: number;
+
+    @Field(() => Environment, { nullable: true })
+    environment?: Environment;
 
     @Field(() => [Observation])
     observations: Observation[];

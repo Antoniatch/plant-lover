@@ -1,6 +1,6 @@
 import { Field, ObjectType } from "type-graphql";
 
-import { Category, Environment, Exposure } from "../enums";
+import { Category, Environment, Exposure } from "@prisma/client";
 
 import { Mix } from "./Mix";
 import { UserPlant } from "./userPlant";
@@ -25,8 +25,8 @@ export class Plant {
     @Field()
     watering: number;
 
-    @Field(() => Exposure)
-    exposure: Exposure;
+    @Field(() => [Exposure])
+    exposure: Exposure[];
 
     @Field(() => [Mix])
     mixes: Mix[];

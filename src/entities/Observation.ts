@@ -13,4 +13,7 @@ export class Observation {
 
     @Field()
     description: string;
+
+    @Field({ nullable: true })
+    image?: string;
 }
