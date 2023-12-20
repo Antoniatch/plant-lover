@@ -1,31 +1,29 @@
+import "reflect-metadata";
+
 import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer } from "@apollo/server/standalone";
+import { buildSchema } from "type-graphql";
 
-const typeDefs = `#graphql
-  type Book {
-    title: String
-  }
+import { UserResolver } from "./resolvers/UserResolver";
 
-  type Query {
-    books: [Book]
-  }
-`;
+const startServer = async (): Promise<void> => {
+    try {
+        const schema = await buildSchema({
+            resolvers: [UserResolver],
+        });
 
-const resolvers = {
-   Query: {
-      books: () => {
-         console.log("Hello");
-      },
-   },
+        const server = new ApolloServer({
+            schema,
+        });
+
+        const { url } = await startStandaloneServer(server, {
+            listen: { port: 4000 },
+        });
+
+        console.log(`🚀  Server ready at: ${url}`);
+    } catch (error) {
+        console.log(error);
+    }
 };
 
-const server = new ApolloServer({
-   typeDefs,
-   resolvers,
-});
-
-const { url } = await startStandaloneServer(server, {
-   listen: { port: 4000 },
-});
-
-console.log(`🚀  Server ready at: ${url}`);
+void startServer();
