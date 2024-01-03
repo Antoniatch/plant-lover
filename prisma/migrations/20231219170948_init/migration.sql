@@ -35,7 +35,7 @@ CREATE TABLE "Plant" (
     "name" TEXT NOT NULL,
     "category" "Category" NOT NULL,
     "watering" DOUBLE PRECISION NOT NULL,
-    "exposure" "Exposure" NOT NULL,
+    "exposure" "Exposure"[],
     "repotting" DOUBLE PRECISION NOT NULL,
     "minTemperature" DOUBLE PRECISION NOT NULL,
     "maxTemperature" DOUBLE PRECISION NOT NULL,
