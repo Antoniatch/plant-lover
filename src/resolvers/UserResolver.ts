@@ -6,12 +6,12 @@ import { prisma } from "../server";
 
 import type { User as PrismaUser } from "@prisma/client";
 import { User } from "../entities/User";
-import { LoginInput, UserLoginResponse, UserCredentials, UserWithoutPassword } from "../types/UserTypes";
+import { LoginInput, UserLoginResponse, UserCredentials, UserWithoutPassword, CreateUserInput } from "../types/UserTypes";
 import { IContext } from "../types/interfaces";
 
-import isUnique from "../utils/isUnique";
 import { getHashedPassword } from "../utils/getHashedPassword";
 import { userIdentification } from "../utils/userIdentification";
+import { catchPrismaError } from "../utils/catchPrismaError";
 
 @Resolver(User)
 export class UserResolver {
@@ -26,16 +26,16 @@ export class UserResolver {
 
             return allUsers;
         } catch (error) {
-            throw new GraphQLError(error);
+            catchPrismaError(error);
         }
     }
 
     @Query(() => UserWithoutPassword)
-    async getOneUser(@Arg("id", { nullable: true }) id?: string, @Arg("name", { nullable: true }) name?: string): Promise<PrismaUser> {
+    async getOneUser(@Arg("id", { nullable: true }) id?: string, @Arg("name", { nullable: true }) name?: string, @Arg("email", { nullable: true }) email?: string): Promise<PrismaUser> {
         try {
-            if (!id && !name) throw new GraphQLError("Please provide user id or name");
+            if (!id && !name && !email) throw new GraphQLError("Merci de renseigner un id, nom ou email");
 
-            const whereOptions = id ? { id } : { name };
+            const whereOptions = id ? { id } : name ? { name } : { email };
 
             const uniqueUser = await prisma.user.findUnique({
                 where: whereOptions,
@@ -44,48 +44,38 @@ export class UserResolver {
                 },
             });
 
-            if (!uniqueUser) throw new GraphQLError("No user found");
+            if (!uniqueUser) throw new GraphQLError("Cet utilisateur n'existe pas");
 
             delete uniqueUser.password;
             return uniqueUser;
         } catch (error) {
-            return error;
+            catchPrismaError(error);
         }
     }
 
     @Query(() => UserCredentials)
     async getOneUserCredentials(@Arg("password") password: string, @Ctx() ctx: IContext): Promise<PrismaUser> {
         try {
-            if (!ctx.user)
-                throw new GraphQLError("User is not authenticated", {
-                    extensions: {
-                        code: "UNAUTHENTICATED",
-                        http: {
-                            status: 401,
-                        },
-                    },
-                });
+            if (!ctx.user) throw new GraphQLError("Utilisateur non authentifié");
 
             const userFromContext = ctx.user;
             const userFromDB = await userIdentification(password, userFromContext.id);
 
             return userFromDB;
         } catch (error) {
-            return error;
+            catchPrismaError(error);
         }
     }
 
     @Mutation(() => User)
-    async createOneUser(@Arg("data") data: LoginInput): Promise<PrismaUser> {
+    async createOneUser(@Arg("data") data: CreateUserInput): Promise<PrismaUser> {
         try {
-            const { name, password } = data;
-
-            const userIsUnique = await isUnique(name);
-            if (!userIsUnique) throw new Error("User name already exists");
+            const { email, name, password } = data;
 
             const hashedPassword = await getHashedPassword(password);
             const newUser = await prisma.user.create({
                 data: {
+                    email,
                     name,
                     password: hashedPassword,
                 },
@@ -96,15 +86,15 @@ export class UserResolver {
 
             return newUser;
         } catch (error) {
-            return error;
+            catchPrismaError(error);
         }
     }
 
     @Mutation(() => UserLoginResponse)
     async login(@Arg("data") data: LoginInput): Promise<UserLoginResponse> {
         try {
-            const { name, password } = data;
-            const userFromDB = await userIdentification(password, null, name);
+            const { email, password } = data;
+            const userFromDB = await userIdentification(password, null, null, email);
 
             const currentUser = {
                 id: userFromDB.id,
@@ -118,7 +108,7 @@ export class UserResolver {
                 accessToken,
             };
         } catch (error) {
-            throw new GraphQLError(error);
+            catchPrismaError(error);
         }
     }
 }
