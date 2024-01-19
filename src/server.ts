@@ -31,7 +31,7 @@ const getUserFromToken = (token: string): string | JwtPayload => {
         }
         return null;
     } catch (error) {
-        throw new GraphQLError(`GET_USER_FROM_TOKEN_ERROR ${error}`);
+        throw new GraphQLError(`TOKEN ERROR ${error}`);
     }
 };
 
@@ -58,11 +58,12 @@ const startServer = async (): Promise<void> => {
         const { url } = await startStandaloneServer(server, {
             context: async ({ req }) => {
                 if (process.env.ACCESS_TOKEN_SECRET === undefined)
-                    throw new GraphQLError("No secret JWT access token provided");
+                    throw new GraphQLError("Pas de clé secrète JWT fournie");
+
                 if (req.headers.authorization === undefined) return {};
 
-                const token = req.headers.authorization || "";
-                const user = getUserFromToken(token);
+                const token = req.headers.authorization;
+                const user = token && getUserFromToken(token);
                 return { user };
             },
 
