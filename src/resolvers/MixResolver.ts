@@ -33,7 +33,9 @@ export class MixResolver {
     }
 
     @Mutation(() => Mix)
-    async findOrCreateMix(@Arg("substrates", () => [Substrate]) substrates: Substrate[]): Promise<PrismaMix> {
+    async findOrCreateMix(
+        @Arg("substrates", () => [Substrate]) substrates: Substrate[],
+    ): Promise<PrismaMix> {
         try {
             const newMixLength = substrates.length;
 

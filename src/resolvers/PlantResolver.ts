@@ -45,7 +45,11 @@ export class PlantResolver {
     }
 
     @Mutation(() => Plant)
-    async createPlant(@Arg("data") data: CreatePlantInput, @Arg("familyId") familyId: string, @Arg("mixIds", () => [idInput]) mixIds: idInput[]): Promise<PrismaPlant> {
+    async createPlant(
+        @Arg("data") data: CreatePlantInput,
+        @Arg("familyId") familyId: string,
+        @Arg("mixIds", () => [idInput]) mixIds: idInput[],
+    ): Promise<PrismaPlant> {
         try {
             const newPlant = await prisma.plant.create({
                 data: {
