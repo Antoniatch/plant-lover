@@ -6,7 +6,7 @@ import { CreateObservationInput } from "../types/ObservationTypes";
 import { GraphQLError } from "graphql";
 
 @Resolver()
-export class ObervationResolver {
+export class ObservationResolver {
     @Query(() => [Observation])
     async getAllObservations(): Promise<PrismaObservation[]> {
         const observations = await prisma.observation.findMany({
