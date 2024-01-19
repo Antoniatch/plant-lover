@@ -18,6 +18,7 @@ import { PlantResolver } from "./resolvers/PlantResolver";
 import { FamilyResolver } from "./resolvers/FamilyResolver";
 import { ObservationResolver } from "./resolvers/ObservationResolver";
 import { TrackingSheetResolver } from "./resolvers/TrackingSheetResolver";
+import { CommentResolver } from "./resolvers/CommentResolver";
 
 export const prisma = new PrismaClient();
 
@@ -36,7 +37,16 @@ const getUserFromToken = (token: string): string | JwtPayload => {
 const startServer = async (): Promise<void> => {
     try {
         const schema = await buildSchema({
-            resolvers: [UserResolver, UserPlantResolver, MixResolver, PlantResolver, FamilyResolver, ObservationResolver, TrackingSheetResolver],
+            resolvers: [
+                UserResolver,
+                UserPlantResolver,
+                MixResolver,
+                PlantResolver,
+                FamilyResolver,
+                ObservationResolver,
+                TrackingSheetResolver,
+                CommentResolver,
+            ],
         });
 
         const server = new ApolloServer<IContext>({
@@ -45,7 +55,8 @@ const startServer = async (): Promise<void> => {
 
         const { url } = await startStandaloneServer(server, {
             context: async ({ req }) => {
-                if (process.env.ACCESS_TOKEN_SECRET === undefined) throw new GraphQLError("No secret JWT access token provided");
+                if (process.env.ACCESS_TOKEN_SECRET === undefined)
+                    throw new GraphQLError("No secret JWT access token provided");
                 if (req.headers.authorization === undefined) return {};
 
                 const token = req.headers.authorization || "";

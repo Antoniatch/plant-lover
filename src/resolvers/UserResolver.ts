@@ -6,7 +6,13 @@ import { prisma } from "../server";
 
 import type { User as PrismaUser } from "@prisma/client";
 import { User } from "../entities/User";
-import { LoginInput, UserLoginResponse, UserCredentials, UserWithoutPassword, CreateUserInput } from "../types/UserTypes";
+import {
+    LoginInput,
+    UserLoginResponse,
+    UserCredentials,
+    UserWithoutPassword,
+    CreateUserInput,
+} from "../types/UserTypes";
 import { IContext } from "../types/interfaces";
 
 import { getHashedPassword } from "../utils/getHashedPassword";
@@ -31,9 +37,14 @@ export class UserResolver {
     }
 
     @Query(() => UserWithoutPassword)
-    async getOneUser(@Arg("id", { nullable: true }) id?: string, @Arg("name", { nullable: true }) name?: string, @Arg("email", { nullable: true }) email?: string): Promise<PrismaUser> {
+    async getOneUser(
+        @Arg("id", { nullable: true }) id?: string,
+        @Arg("name", { nullable: true }) name?: string,
+        @Arg("email", { nullable: true }) email?: string,
+    ): Promise<PrismaUser> {
         try {
-            if (!id && !name && !email) throw new GraphQLError("Merci de renseigner un id, nom ou email");
+            if (!id && !name && !email)
+                throw new GraphQLError("Merci de renseigner un id, nom ou email");
 
             const whereOptions = id ? { id } : name ? { name } : { email };
 
@@ -54,7 +65,10 @@ export class UserResolver {
     }
 
     @Query(() => UserCredentials)
-    async getOneUserCredentials(@Arg("password") password: string, @Ctx() ctx: IContext): Promise<PrismaUser> {
+    async getOneUserCredentials(
+        @Arg("password") password: string,
+        @Ctx() ctx: IContext,
+    ): Promise<PrismaUser> {
         try {
             if (!ctx.user) throw new GraphQLError("Utilisateur non authentifié");
 
