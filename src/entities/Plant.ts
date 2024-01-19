@@ -4,6 +4,7 @@ import { Category, Environment, Exposure } from "../enums";
 
 import { Mix } from "./Mix";
 import { UserPlant } from "./userPlant";
+import { Comment } from "./Comment";
 
 @ObjectType()
 export class Plant {
@@ -45,4 +46,7 @@ export class Plant {
 
     @Field(() => [UserPlant])
     userPlants: UserPlant[];
+
+    @Field(() => [Comment])
+    comments: Comment[];
 }

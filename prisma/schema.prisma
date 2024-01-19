@@ -43,8 +43,13 @@ model User {
   email  String @unique
   name  String @unique
   password  String
+  birthday DateTime?
 
-  userPlants UserPlant[]  
+  trackingSheet TrackingSheet[]
+
+  userPlants UserPlant[]
+  observations Observation[]
+  comments Comment[]
 }
 
 model Plant {
@@ -64,6 +69,7 @@ model Plant {
 
   mixes Mix[]
   userPlants UserPlant[]
+  comments Comment[]
 }
 
 model UserPlant {
@@ -71,7 +77,7 @@ model UserPlant {
   category Category
   image String?
   nickname String?
-  birthday String?
+  birthday DateTime?
   watering Float?
   exposure Exposure?
   repotting Float?
@@ -84,6 +90,7 @@ model UserPlant {
   mix Mix? @relation(fields: [mixId], references: [id])
   mixId String?
   observations Observation[]
+  comments Comment[]
   trackingSheet TrackingSheet?
 }
 
@@ -104,19 +111,29 @@ model Family {
 
 model Observation {
   id String @id @default(uuid())
-  date String
+  date DateTime @default(now())
   description String
   image String?
+  helpCenter Boolean
+  public Boolean
+
+  user User @relation(fields: [userId], references: [id])
+  userId String
 
   userPlant UserPlant @relation(fields: [userPlantId], references: [id])
   userPlantId String
+
+  comments Comment[]
 }
 
 model TrackingSheet {
   id  String  @id @default(uuid())
-  watering String[]
-  repotting String[]
-  pruning String[]
+  watering DateTime[]
+  repotting DateTime[]
+  pruning DateTime[]
+
+  user User @relation(fields: [userId], references: [id])
+  userId String
 
   userPlant UserPlant @relation(fields: [userPlantId], references: [id])
   userPlantId String @unique
@@ -126,9 +143,28 @@ model TrackingSheet {
 
 model Size {
   id  String  @id @default(uuid())
-  date String
+  date DateTime @default(now())
   size Float
 
   trackingSheet TrackingSheet @relation(fields: [trackingSheetId], references: [id])
   trackingSheetId String
+}
+
+model Comment {
+  id String @id @default(uuid())
+  text String
+  date DateTime @default(now())
+  likes Int @default(0)
+
+  author User @relation(fields: [authorId], references: [id])
+  authorId String
+
+  observation Observation? @relation(fields: [observationId], references: [id])
+  observationId String?
+
+  userPlant UserPlant? @relation(fields: [userPlantId], references: [id])
+  userPlantId String?
+
+  plant Plant? @relation(fields: [plantId], references: [id])
+  plantId String?
 }

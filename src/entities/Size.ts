@@ -9,7 +9,7 @@ export class Size {
     trackingSheetId: string;
 
     @Field(() => Date)
-    date: string;
+    date: Date;
 
     @Field()
     size: number;

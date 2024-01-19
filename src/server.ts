@@ -16,6 +16,7 @@ import type { IContext } from "./types/interfaces";
 import { MixResolver } from "./resolvers/MixResolver";
 import { PlantResolver } from "./resolvers/PlantResolver";
 import { FamilyResolver } from "./resolvers/FamilyResolver";
+import { ObervationResolver } from "./resolvers/ObservationResolver";
 
 export const prisma = new PrismaClient();
 
@@ -34,7 +35,7 @@ const getUserFromToken = (token: string): string | JwtPayload => {
 const startServer = async (): Promise<void> => {
     try {
         const schema = await buildSchema({
-            resolvers: [UserResolver, UserPlantResolver, MixResolver, PlantResolver, FamilyResolver],
+            resolvers: [UserResolver, UserPlantResolver, MixResolver, PlantResolver, FamilyResolver, ObervationResolver],
         });
 
         const server = new ApolloServer<IContext>({
