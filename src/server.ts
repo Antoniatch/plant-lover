@@ -7,10 +7,14 @@ import type { JwtPayload } from "jsonwebtoken";
 import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer } from "@apollo/server/standalone";
 import { buildSchema } from "type-graphql";
+import { GraphQLError } from "graphql";
 
 import { UserResolver } from "./resolvers/UserResolver";
-import { GraphQLError } from "graphql";
+import { UserPlantResolver } from "./resolvers/UserPlantResolver";
+
 import type { IContext } from "./types/interfaces";
+import { MixResolver } from "./resolvers/MixResolver";
+import { PlantResolver } from "./resolvers/PlantResolver";
 
 export const prisma = new PrismaClient();
 
@@ -29,7 +33,7 @@ const getUserFromToken = (token: string): string | JwtPayload => {
 const startServer = async (): Promise<void> => {
     try {
         const schema = await buildSchema({
-            resolvers: [UserResolver],
+            resolvers: [UserResolver, UserPlantResolver, MixResolver, PlantResolver],
         });
 
         const server = new ApolloServer<IContext>({
