@@ -4,45 +4,58 @@ import type { Family as PrismaFamily } from "@prisma/client";
 import { prisma } from "../server";
 import { CreateFamilyInput } from "../types/FamilyTypes";
 import { GraphQLError } from "graphql";
+import { catchPrismaError } from "../utils/catchPrismaError";
 
 @Resolver()
 export class FamilyResolver {
     @Query(() => [Family])
     async getAllFamilies(): Promise<PrismaFamily[]> {
-        const families = await prisma.family.findMany({
-            include: {
-                plants: true,
-            },
-        });
+        try {
+            const families = await prisma.family.findMany({
+                include: {
+                    plants: true,
+                },
+            });
 
-        return families;
+            return families;
+        } catch (error) {
+            catchPrismaError(error);
+        }
     }
 
     @Query(() => Family)
     async getOneFamily(@Arg("id") id: string): Promise<PrismaFamily> {
-        const family = await prisma.family.findUnique({
-            where: {
-                id,
-            },
-            include: {
-                plants: true,
-            },
-        });
+        try {
+            const family = await prisma.family.findUnique({
+                where: {
+                    id,
+                },
+                include: {
+                    plants: true,
+                },
+            });
 
-        if (!family) throw new GraphQLError("Cette famille de plantes n'existe pas");
+            if (!family) throw new GraphQLError("Cette famille de plantes n'existe pas");
 
-        return family;
+            return family;
+        } catch (error) {
+            catchPrismaError(error);
+        }
     }
 
     @Mutation(() => Family)
     async createFamily(@Arg("data") data: CreateFamilyInput): Promise<PrismaFamily> {
-        const newFamily = await prisma.family.create({
-            data,
-            include: {
-                plants: true,
-            },
-        });
+        try {
+            const newFamily = await prisma.family.create({
+                data,
+                include: {
+                    plants: true,
+                },
+            });
 
-        return newFamily;
+            return newFamily;
+        } catch (error) {
+            catchPrismaError(error);
+        }
     }
 }
