@@ -7,17 +7,20 @@ export class TrackingSheet {
     id: string;
 
     @Field()
+    userId: string;
+
+    @Field()
     userPlantId: string;
 
     @Field(() => [Size])
     sizes: Size[];
 
     @Field(() => [Date])
-    watering: string[];
+    watering: Date[];
 
     @Field(() => [Date])
-    repotting: string[];
+    repotting: Date[];
 
     @Field(() => [Date])
-    pruning: string[];
+    pruning: Date[];
 }

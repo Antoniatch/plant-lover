@@ -1,6 +1,9 @@
 import { Field, ObjectType } from "type-graphql";
 
 import { UserPlant } from "./userPlant";
+import { TrackingSheet } from "./TrackingSheet";
+import { Observation } from "./Observation";
+import { Comment } from "./Comment";
 
 @ObjectType()
 export class User {
@@ -16,6 +19,18 @@ export class User {
     @Field()
     password: string;
 
+    @Field(() => Date, { nullable: true })
+    birthday?: Date;
+
+    @Field(() => [TrackingSheet])
+    trackingSheet: TrackingSheet[];
+
     @Field(() => [UserPlant])
     userPlants: UserPlant[];
+
+    @Field(() => [Observation])
+    observations: Observation[];
+
+    @Field(() => [Comment])
+    comments: Comment[];
 }

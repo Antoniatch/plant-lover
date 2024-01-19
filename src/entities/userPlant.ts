@@ -2,6 +2,8 @@ import { Field, ObjectType } from "type-graphql";
 import { Category, Environment, Exposure } from "../enums";
 
 import { Observation } from "./Observation";
+import { Comment } from "./Comment";
+import { TrackingSheet } from "./TrackingSheet";
 
 @ObjectType()
 export class UserPlant {
@@ -17,9 +19,6 @@ export class UserPlant {
     @Field()
     userId: string;
 
-    @Field()
-    trackingId: string;
-
     @Field({ nullable: true })
     mixId?: string;
 
@@ -30,7 +29,7 @@ export class UserPlant {
     nickname?: string;
 
     @Field(() => Date, { nullable: true })
-    birthday?: string;
+    birthday?: Date;
 
     @Field({ nullable: true })
     watering?: number;
@@ -46,4 +45,10 @@ export class UserPlant {
 
     @Field(() => [Observation])
     observations: Observation[];
+
+    @Field(() => [Comment])
+    comments: Comment[];
+
+    @Field(() => TrackingSheet, { nullable: true })
+    trackingSheet?: TrackingSheet;
 }
