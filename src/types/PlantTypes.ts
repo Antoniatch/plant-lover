@@ -1,23 +1,13 @@
-import { Field, ObjectType } from "type-graphql";
-
+import { Field, InputType } from "type-graphql";
 import { Category, Environment, Exposure } from "../enums";
 
-import { Mix } from "./Mix";
-import { UserPlant } from "./userPlant";
-
-@ObjectType()
-export class Plant {
-    @Field()
-    id: string;
-
+@InputType()
+export class CreatePlantInput {
     @Field()
     image: string;
 
     @Field()
     name: string;
-
-    @Field()
-    familyId: string;
 
     @Field(() => Category)
     category: Category;
@@ -27,9 +17,6 @@ export class Plant {
 
     @Field(() => [Exposure])
     exposure: Exposure[];
-
-    @Field(() => [Mix])
-    mixes: Mix[];
 
     @Field()
     repotting: number;
@@ -42,7 +29,10 @@ export class Plant {
 
     @Field(() => Environment)
     environment: Environment;
+}
 
-    @Field(() => [UserPlant])
-    userPlants: UserPlant[];
+@InputType()
+export class idInput {
+    @Field()
+    id: string;
 }

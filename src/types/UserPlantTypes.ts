@@ -1,12 +1,10 @@
-import { Field, ObjectType } from "type-graphql";
+import { Field, InputType } from "type-graphql";
 import { Category, Environment, Exposure } from "../enums";
 
-import { Observation } from "./Observation";
-
-@ObjectType()
-export class UserPlant {
+@InputType()
+export class CreateUserPlantInput {
     @Field()
-    id: string;
+    userId: string;
 
     @Field(() => Category)
     category: Category;
@@ -15,13 +13,7 @@ export class UserPlant {
     plantId?: string;
 
     @Field()
-    userId: string;
-
-    @Field()
-    trackingId: string;
-
-    @Field({ nullable: true })
-    mixId?: string;
+    mixId: string;
 
     @Field({ nullable: true })
     image?: string;
@@ -43,7 +35,4 @@ export class UserPlant {
 
     @Field(() => Environment, { nullable: true })
     environment?: Environment;
-
-    @Field(() => [Observation])
-    observations: Observation[];
 }
