@@ -5,6 +5,18 @@ import { UserPlant } from "../entities/userPlant";
 @InputType()
 export class LoginInput implements Partial<User> {
     @Field()
+    email: string;
+
+    @Field()
+    password: string;
+}
+
+@InputType()
+export class CreateUserInput implements Partial<User> {
+    @Field()
+    email: string;
+
+    @Field()
     name: string;
 
     @Field()
@@ -14,35 +26,41 @@ export class LoginInput implements Partial<User> {
 @ObjectType()
 export class UserLoginResponse {
     @Field()
-    id: string
+    id: string;
 
     @Field()
-    name: string
-    
+    name: string;
+
     @Field()
-    accessToken: string
+    accessToken: string;
 }
 
 @ObjectType()
 export class UserWithoutPassword implements Partial<User> {
     @Field()
-    id: string
+    id: string;
 
     @Field()
-    name: string
+    email: string;
 
-    @Field(() => [UserPlant], {nullable: true})
+    @Field()
+    name: string;
+
+    @Field(() => [UserPlant], { nullable: true })
     userPlants?: UserPlant[];
 }
 
 @ObjectType()
-export class UserCredentials implements Partial <User> {
+export class UserCredentials implements Partial<User> {
     @Field()
-    id: string
+    id: string;
 
     @Field()
-    name?: string;
+    email: string;
 
     @Field()
-    password?: string;
+    name: string;
+
+    @Field()
+    password: string;
 }
