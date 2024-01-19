@@ -19,6 +19,7 @@ import { FamilyResolver } from "./resolvers/FamilyResolver";
 import { ObservationResolver } from "./resolvers/ObservationResolver";
 import { TrackingSheetResolver } from "./resolvers/TrackingSheetResolver";
 import { CommentResolver } from "./resolvers/CommentResolver";
+import { SizeResolver } from "./resolvers/SizeResolver";
 
 export const prisma = new PrismaClient();
 
@@ -46,6 +47,7 @@ const startServer = async (): Promise<void> => {
                 ObservationResolver,
                 TrackingSheetResolver,
                 CommentResolver,
+                SizeResolver,
             ],
         });
 
