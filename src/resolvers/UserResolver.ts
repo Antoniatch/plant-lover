@@ -84,13 +84,14 @@ export class UserResolver {
     @Mutation(() => User)
     async createOneUser(@Arg("data") data: CreateUserInput): Promise<PrismaUser> {
         try {
-            const { email, name, password } = data;
+            const { email, name, password, birthday } = data;
 
             const hashedPassword = await getHashedPassword(password);
             const newUser = await prisma.user.create({
                 data: {
                     email,
                     name,
+                    birthday,
                     password: hashedPassword,
                 },
                 include: {

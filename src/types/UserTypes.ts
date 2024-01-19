@@ -19,6 +19,9 @@ export class CreateUserInput implements Partial<User> {
     @Field()
     name: string;
 
+    @Field({ nullable: true })
+    birthday?: Date;
+
     @Field()
     password: string;
 }
