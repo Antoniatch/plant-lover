@@ -14,6 +14,8 @@ export class UserPlantResolver {
             const userPlants = await prisma.userPlant.findMany({
                 include: {
                     observations: true,
+                    comments: true,
+                    likes: true,
                 },
             });
 
@@ -32,6 +34,8 @@ export class UserPlantResolver {
                 },
                 include: {
                     observations: true,
+                    comments: true,
+                    likes: true,
                 },
             });
 
@@ -47,6 +51,11 @@ export class UserPlantResolver {
         try {
             const newUserPlant = await prisma.userPlant.create({
                 data,
+                include: {
+                    observations: true,
+                    comments: true,
+                    likes: true,
+                },
             });
 
             return newUserPlant;

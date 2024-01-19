@@ -4,6 +4,7 @@ import { Category, Environment, Exposure } from "../enums";
 import { Observation } from "./Observation";
 import { Comment } from "./Comment";
 import { TrackingSheet } from "./TrackingSheet";
+import { Like } from "./Like";
 
 @ObjectType()
 export class UserPlant {
@@ -51,4 +52,7 @@ export class UserPlant {
 
     @Field(() => TrackingSheet, { nullable: true })
     trackingSheet?: TrackingSheet;
+
+    @Field(() => [Like])
+    likes: Like[];
 }

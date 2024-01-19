@@ -3,7 +3,12 @@ import { prisma } from "../server";
 import * as bcrypt from "bcrypt";
 import type { User as PrismaUser } from "@prisma/client";
 
-export const userIdentification = async (password: string, id?: string, name?: string, email?: string): Promise<PrismaUser> => {
+export const userIdentification = async (
+    password: string,
+    id?: string,
+    name?: string,
+    email?: string,
+): Promise<PrismaUser> => {
     if (!id && !name && !email) throw new GraphQLError("Veuillez renseigner un id, nom ou e-mail");
 
     try {
@@ -13,6 +18,11 @@ export const userIdentification = async (password: string, id?: string, name?: s
             where: whereOptions,
             include: {
                 userPlants: true,
+                observations: true,
+                comments: true,
+                trackingSheet: true,
+                receivedLikes: true,
+                authorLikes: true,
             },
         });
 
