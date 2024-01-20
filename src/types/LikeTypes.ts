@@ -1,16 +1,7 @@
-import { Field, ObjectType } from "type-graphql";
+import { Field, InputType } from "type-graphql";
 
-@ObjectType()
-export class Like {
-    @Field()
-    id: string;
-
-    @Field(() => Date)
-    date: Date;
-
-    @Field()
-    authorId: string;
-
+@InputType()
+export class CreateLikeInput {
     @Field({ nullable: true })
     userId?: string;
 

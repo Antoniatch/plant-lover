@@ -14,6 +14,7 @@ export class ObservationResolver {
             const observations = await prisma.observation.findMany({
                 include: {
                     comments: true,
+                    likes: true,
                 },
             });
 
@@ -32,6 +33,7 @@ export class ObservationResolver {
                 },
                 include: {
                     comments: true,
+                    likes: true,
                 },
             });
 
@@ -50,6 +52,7 @@ export class ObservationResolver {
                 data,
                 include: {
                     comments: true,
+                    likes: true,
                 },
             });
 

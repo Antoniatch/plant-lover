@@ -20,6 +20,7 @@ import { ObservationResolver } from "./resolvers/ObservationResolver";
 import { TrackingSheetResolver } from "./resolvers/TrackingSheetResolver";
 import { CommentResolver } from "./resolvers/CommentResolver";
 import { SizeResolver } from "./resolvers/SizeResolver";
+import { LikeResolver } from "./resolvers/LikeResolver";
 
 export const prisma = new PrismaClient();
 
@@ -31,7 +32,8 @@ const getUserFromToken = (token: string): string | JwtPayload => {
         }
         return null;
     } catch (error) {
-        throw new GraphQLError(`TOKEN ERROR ${error}`);
+        const message: string = error;
+        throw new GraphQLError(message);
     }
 };
 
@@ -48,6 +50,7 @@ const startServer = async (): Promise<void> => {
                 TrackingSheetResolver,
                 CommentResolver,
                 SizeResolver,
+                LikeResolver,
             ],
         });
 
