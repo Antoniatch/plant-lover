@@ -27,6 +27,11 @@ export class UserResolver {
             const allUsers = await prisma.user.findMany({
                 include: {
                     userPlants: true,
+                    observations: true,
+                    comments: true,
+                    trackingSheet: true,
+                    receivedLikes: true,
+                    authorLikes: true,
                 },
             });
 
@@ -52,6 +57,11 @@ export class UserResolver {
                 where: whereOptions,
                 include: {
                     userPlants: true,
+                    observations: true,
+                    comments: true,
+                    trackingSheet: true,
+                    receivedLikes: true,
+                    authorLikes: true,
                 },
             });
 
@@ -96,6 +106,11 @@ export class UserResolver {
                 },
                 include: {
                     userPlants: true,
+                    observations: true,
+                    comments: true,
+                    trackingSheet: true,
+                    receivedLikes: true,
+                    authorLikes: true,
                 },
             });
 

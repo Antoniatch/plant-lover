@@ -12,7 +12,11 @@ export class CommentResolver {
     @Query(() => [Comment])
     async getAllComments(): Promise<PrismaComment[]> {
         try {
-            const comments = await prisma.comment.findMany();
+            const comments = await prisma.comment.findMany({
+                include: {
+                    likes: true,
+                },
+            });
 
             return comments;
         } catch (error) {
@@ -28,6 +32,9 @@ export class CommentResolver {
             const observationComments = await prisma.comment.findMany({
                 where: {
                     observationId,
+                },
+                include: {
+                    likes: true,
                 },
             });
 
@@ -46,6 +53,9 @@ export class CommentResolver {
                 where: {
                     userPlantId,
                 },
+                include: {
+                    likes: true,
+                },
             });
 
             return userPlantComments;
@@ -61,6 +71,9 @@ export class CommentResolver {
                 where: {
                     plantId,
                 },
+                include: {
+                    likes: true,
+                },
             });
 
             return plantComments;
@@ -75,6 +88,9 @@ export class CommentResolver {
             const comment = await prisma.comment.findUnique({
                 where: {
                     id,
+                },
+                include: {
+                    likes: true,
                 },
             });
 
@@ -148,6 +164,9 @@ export class CommentResolver {
 
             const newComment = await prisma.comment.create({
                 data: myData,
+                include: {
+                    likes: true,
+                },
             });
 
             return newComment;

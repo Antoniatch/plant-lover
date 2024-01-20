@@ -4,6 +4,7 @@ import { UserPlant } from "./userPlant";
 import { TrackingSheet } from "./TrackingSheet";
 import { Observation } from "./Observation";
 import { Comment } from "./Comment";
+import { Like } from "./Like";
 
 @ObjectType()
 export class User {
@@ -33,4 +34,7 @@ export class User {
 
     @Field(() => [Comment])
     comments: Comment[];
+
+    @Field(() => [Like])
+    likes: Like[];
 }

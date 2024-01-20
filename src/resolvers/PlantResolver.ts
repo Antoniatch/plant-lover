@@ -15,6 +15,8 @@ export class PlantResolver {
                 include: {
                     userPlants: true,
                     mixes: true,
+                    comments: true,
+                    likes: true,
                 },
             });
 
@@ -34,6 +36,8 @@ export class PlantResolver {
                 include: {
                     mixes: true,
                     userPlants: true,
+                    comments: true,
+                    likes: true,
                 },
             });
 
@@ -66,6 +70,8 @@ export class PlantResolver {
                 include: {
                     mixes: true,
                     userPlants: true,
+                    comments: true,
+                    likes: true,
                 },
             });
 

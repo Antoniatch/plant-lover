@@ -12,6 +12,9 @@ export class TrackingSheet {
     @Field()
     userPlantId: string;
 
+    @Field()
+    public: boolean;
+
     @Field(() => [Size])
     sizes: Size[];
 
