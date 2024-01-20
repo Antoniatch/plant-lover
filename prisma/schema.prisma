@@ -129,6 +129,7 @@ model Observation {
   userPlantId String
 
   comments Comment[]
+  likes Like[]
 }
 
 model TrackingSheet {
@@ -193,4 +194,7 @@ model Like {
 
   userPlant UserPlant? @relation(fields: [userPlantId], references: [id])
   userPlantId String?
+
+  observation Observation? @relation(fields: [observationId], references: [id])
+  observationId String ?
 }

@@ -1,5 +1,6 @@
 import { Field, ObjectType } from "type-graphql";
 import { Comment } from "./Comment";
+import { Like } from "./Like";
 
 @ObjectType()
 export class Observation {
@@ -29,4 +30,7 @@ export class Observation {
 
     @Field(() => [Comment])
     comments: Comment[];
+
+    @Field(() => [Like])
+    likes: Like[];
 }

@@ -47,11 +47,11 @@ export class UserPlant {
     @Field(() => [Observation])
     observations: Observation[];
 
-    @Field(() => [Comment])
-    comments: Comment[];
-
     @Field(() => TrackingSheet, { nullable: true })
     trackingSheet?: TrackingSheet;
+
+    @Field(() => [Comment])
+    comments: Comment[];
 
     @Field(() => [Like])
     likes: Like[];
