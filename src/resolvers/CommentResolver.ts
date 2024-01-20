@@ -6,9 +6,24 @@ import { CreateCommentInput } from "../types/CommentTypes";
 import { GraphQLError } from "graphql";
 import { catchPrismaError } from "../utils/catchPrismaError";
 import { IContext } from "../types/interfaces";
+import { authenticationCheck } from "../utils/authenticationCheck";
 
 @Resolver()
 export class CommentResolver {
+    @Query()
+    async getNumberOfComments(
+        @Arg("field") field: "plantId" | "UserPlantId" | "observationId",
+        @Arg("fieldId") fieldId: string,
+    ): Promise<number> {
+        const numberOfcomments = await prisma.comment.count({
+            where: {
+                [field]: fieldId,
+            },
+        });
+
+        return numberOfcomments;
+    }
+
     @Query(() => [Comment])
     async getAllComments(): Promise<PrismaComment[]> {
         try {
@@ -27,8 +42,11 @@ export class CommentResolver {
     @Query(() => [Comment])
     async getAllObservationComments(
         @Arg("observationId") observationId: string,
+        @Ctx() ctx: IContext,
     ): Promise<PrismaComment[]> {
         try {
+            authenticationCheck(ctx);
+
             const observationComments = await prisma.comment.findMany({
                 where: {
                     observationId,
@@ -47,8 +65,11 @@ export class CommentResolver {
     @Query(() => [Comment])
     async getAllUserPlantComments(
         @Arg("userPlantId") userPlantId: string,
+        @Ctx() ctx: IContext,
     ): Promise<PrismaComment[]> {
         try {
+            authenticationCheck(ctx);
+
             const userPlantComments = await prisma.comment.findMany({
                 where: {
                     userPlantId,
@@ -83,7 +104,7 @@ export class CommentResolver {
     }
 
     @Query(() => Comment)
-    async getOneComment(@Arg("id") id: string): Promise<PrismaComment> {
+    async getOneComment(@Arg("id") id: string, @Ctx() ctx: IContext): Promise<PrismaComment> {
         try {
             const comment = await prisma.comment.findUnique({
                 where: {
@@ -95,6 +116,8 @@ export class CommentResolver {
             });
 
             if (!comment) throw new GraphQLError("Ce commentaire n'existe pas");
+
+            if (comment.observationId || comment.userPlantId) authenticationCheck(ctx);
 
             return comment;
         } catch (error) {
@@ -108,9 +131,7 @@ export class CommentResolver {
         @Ctx() ctx: IContext,
     ): Promise<PrismaComment> {
         try {
-            const userFromContext = ctx.user;
-
-            if (!userFromContext) throw new GraphQLError("Utilisateur non authentifié");
+            const userFromContext = authenticationCheck(ctx);
 
             const authorId = userFromContext.id;
             const { text, observationId, userPlantId, plantId } = data;
@@ -119,6 +140,19 @@ export class CommentResolver {
                 throw new GraphQLError(
                     "Ce commentaire n'est associé à aucune observation, plante d'utilisateur, ou plante",
                 );
+
+            if (data.observationId) {
+                const observation = await prisma.observation.findUnique({
+                    where: {
+                        id: data.observationId,
+                    },
+                });
+
+                if (!observation.public)
+                    throw new GraphQLError(
+                        "Cette observation est privée, les commentaires n'y sont pas autorisés",
+                    );
+            }
 
             const myData = observationId
                 ? {

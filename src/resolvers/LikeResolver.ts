@@ -7,9 +7,24 @@ import { GraphQLError } from "graphql";
 import { catchPrismaError } from "../utils/catchPrismaError";
 import { IContext } from "../types/interfaces";
 import { connectToUniqueField } from "../utils/connectToUniqueField";
+import { authenticationCheck } from "../utils/authenticationCheck";
 
 @Resolver()
 export class LikeResolver {
+    @Query()
+    async getNumberOfLikes(
+        @Arg("field") field: "userId" | "commentId" | "plantId" | "UserPlantId" | "observationId",
+        @Arg("fieldId") fieldId: string,
+    ): Promise<number> {
+        const numberOflikes = await prisma.like.count({
+            where: {
+                [field]: fieldId,
+            },
+        });
+
+        return numberOflikes;
+    }
+
     @Query(() => [Like])
     async getAllLikes(): Promise<PrismaLike[]> {
         try {
@@ -22,8 +37,19 @@ export class LikeResolver {
     }
 
     @Query(() => [Like])
-    async getAllAuthorLikes(@Arg("authorId") authorId: string): Promise<PrismaLike[]> {
+    async getAllAuthorLikes(
+        @Arg("authorId") authorId: string,
+        @Arg("userId") userId: string,
+        @Ctx() ctx: IContext,
+    ): Promise<PrismaLike[]> {
         try {
+            const userFromContext = authenticationCheck(ctx);
+
+            if (userFromContext.id !== userId)
+                throw new GraphQLError(
+                    "Accès refusé : vous n'êtes pas le propriétaire de ce profil",
+                );
+
             const authorLikes = await prisma.like.findMany({
                 where: {
                     authorId,
@@ -54,8 +80,11 @@ export class LikeResolver {
     @Query(() => [Like])
     async getAllObservationLikes(
         @Arg("observationId") observationId: string,
+        @Ctx() ctx: IContext,
     ): Promise<PrismaLike[]> {
         try {
+            authenticationCheck(ctx);
+
             const observationLikes = await prisma.like.findMany({
                 where: {
                     observationId,
@@ -69,8 +98,13 @@ export class LikeResolver {
     }
 
     @Query(() => [Like])
-    async getAllUserPlantLikes(@Arg("userPlantId") userPlantId: string): Promise<PrismaLike[]> {
+    async getAllUserPlantLikes(
+        @Arg("userPlantId") userPlantId: string,
+        @Ctx() ctx: IContext,
+    ): Promise<PrismaLike[]> {
         try {
+            authenticationCheck(ctx);
+
             const userPlantLikes = await prisma.like.findMany({
                 where: {
                     userPlantId,
@@ -93,6 +127,26 @@ export class LikeResolver {
             });
 
             return plantLikes;
+        } catch (error) {
+            catchPrismaError(error);
+        }
+    }
+
+    @Query(() => [Like])
+    async getAllCommentLikes(
+        @Arg("commentId") commentId: string,
+        @Ctx() ctx: IContext,
+    ): Promise<PrismaLike[]> {
+        try {
+            authenticationCheck(ctx);
+
+            const commentLikes = await prisma.like.findMany({
+                where: {
+                    commentId,
+                },
+            });
+
+            return commentLikes;
         } catch (error) {
             catchPrismaError(error);
         }
@@ -132,6 +186,19 @@ export class LikeResolver {
                 throw new GraphQLError(
                     "Ce like n'est associé à aucun utilisateur, commentaire, observation, plante d'utilisateur, ou plante",
                 );
+
+            if (data.observationId) {
+                const observation = await prisma.observation.findUnique({
+                    where: {
+                        id: data.observationId,
+                    },
+                });
+
+                if (!observation.public)
+                    throw new GraphQLError(
+                        "Cette observation est privée, les likes n'y sont pas autorisés",
+                    );
+            }
 
             const myData = observationId
                 ? connectToUniqueField(authorId, "observation", observationId)
