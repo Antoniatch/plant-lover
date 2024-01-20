@@ -2,6 +2,9 @@ import { Field, InputType } from "type-graphql";
 
 @InputType()
 export class CreateTrackingSheetInput {
+    @Field()
+    public: boolean;
+
     @Field(() => [Date])
     watering: Date[];
 

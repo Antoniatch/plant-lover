@@ -133,6 +133,7 @@ model Observation {
 
 model TrackingSheet {
   id  String  @id @default(uuid())
+  public Boolean
   watering DateTime[]
   repotting DateTime[]
   pruning DateTime[]
