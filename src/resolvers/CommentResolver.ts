@@ -10,7 +10,7 @@ import { authenticationCheck } from "../utils/authenticationCheck";
 
 @Resolver()
 export class CommentResolver {
-    @Query()
+    @Query(() => Number)
     async getNumberOfComments(
         @Arg("field") field: "plantId" | "UserPlantId" | "observationId",
         @Arg("fieldId") fieldId: string,

@@ -11,7 +11,7 @@ import { authenticationCheck } from "../utils/authenticationCheck";
 
 @Resolver()
 export class LikeResolver {
-    @Query()
+    @Query(() => Number)
     async getNumberOfLikes(
         @Arg("field") field: "userId" | "commentId" | "plantId" | "UserPlantId" | "observationId",
         @Arg("fieldId") fieldId: string,
