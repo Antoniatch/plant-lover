@@ -11,11 +11,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out the code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4.1.1
       # The following lines will Cache the npm modules when running the test  
       # so the actions will be faster
-      - name: Cache node modules        
-        uses: actions/cache@v3
+      - name: Cache
+        uses: actions/cache@v4.0.0
         env:
           cache-name: cache-node-modules
         with:
