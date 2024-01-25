@@ -13,5 +13,13 @@
         "@typescript-eslint/prefer-nullish-coalescing": "off",
         "@typescript-eslint/strict-boolean-expressions": "off"
     },
-    "plugins": ["prettier"]
+    "plugins": ["prettier"],
+    "overrides": [
+        {
+            "files": ["tests/**/*"],
+            "env": {
+                "jest": true
+            }
+        }
+    ]
 }

@@ -7,7 +7,7 @@
 
     // Apollo Server additional config
     "rootDir": "src",
-    "types": ["node"],
+    "types": ["node", "jest"],
 
     // Minimal configuration for Type GraphQL
     "module": "CommonJS",
@@ -16,6 +16,6 @@
     "experimentalDecorators": true,
   },
   "lib": ["es2021"],
-  "include": ["src/**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": ["src/**/*.ts", "src/*.ts"],
+  "exclude": ["node_modules"],
 }

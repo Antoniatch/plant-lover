@@ -70,7 +70,9 @@ const startServer = async (): Promise<void> => {
                 return { user };
             },
 
-            listen: { port: 4000 },
+            listen: {
+                port: 4000,
+            },
         });
 
         console.log(`🚀  Server ready at: ${url}`);
