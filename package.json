@@ -5,8 +5,11 @@
   "main": "server.ts",
   "scripts": {
     "compile": "tsc",
-    "start": "npm run compile && node ./dist/server.js",
+    "prod": "npm run compile && node ./dist/server.js",
     "server": "ts-node-dev src/server.ts --watch src",
+    "prisma-client": "npx prisma generate",
+    "prisma-migrate-dev": "npx prisma migrate dev",
+    "prisma-migrate-prod": "npx prisma migrate deploy",
     "test": "jest --detectOpenHandles --config jest.config.ts ./src/tests/",
     "test-clear": "jest --clearCache"
   },

@@ -1,0 +1,5 @@
+node_modules
+.github
+eslintrc.json
+.prettierrc
+jest.config.ts
