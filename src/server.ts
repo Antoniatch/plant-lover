@@ -2,19 +2,18 @@ import "reflect-metadata";
 
 import { PrismaClient } from "@prisma/client";
 
-import jwt from "jsonwebtoken";
-import type { JwtPayload } from "jsonwebtoken";
-
 import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@apollo/server/express4";
 import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
-// import { startStandaloneServer } from "@apollo/server/standalone";
 import { buildSchema } from "type-graphql";
 import { GraphQLError } from "graphql";
 
 import express from "express";
 import cors from "cors";
 import http from "http";
+
+import jwt from "jsonwebtoken";
+import type { JwtPayload } from "jsonwebtoken";
 
 import { UserResolver } from "./resolvers/UserResolver";
 import { UserPlantResolver } from "./resolvers/UserPlantResolver";
