@@ -73,7 +73,7 @@ const startServer = async (): Promise<void> => {
         app.use(
             "/",
             // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-            cors({ origin: "http://localhost:4200", credentials: true }),
+            cors({ origin: process.env.ORIGIN, credentials: true }),
             express.json(),
             expressMiddleware(server, {
                 context: async ({ req }) => {
@@ -95,7 +95,7 @@ const startServer = async (): Promise<void> => {
             httpServer.listen({ port: process.env.PORT }, resolve),
         );
 
-        console.log(`🚀  Server ready at ${process.env.API_URL}`);
+        console.log(`🚀  Server ready at http://${process.env.HOST}:${process.env.PORT}`);
     } catch (error) {
         console.log(error);
     }
