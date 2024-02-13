@@ -74,7 +74,9 @@ const startServer = async (): Promise<void> => {
             "http://localhost:4200",
             "http://localhost:4201",
             "https://disbeleaf.fr",
+            "https://www.disbeleaf.fr",
             "https://staging.disbeleaf.fr",
+            "https://www.staging.disbeleaf.fr",
         ];
 
         app.use(
