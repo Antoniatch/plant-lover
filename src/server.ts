@@ -70,10 +70,19 @@ const startServer = async (): Promise<void> => {
 
         await server.start();
 
+        const origin = [
+            "http://localhost:4200",
+            "http://localhost:4201",
+            "https://disbeleaf.fr",
+            "https://www.disbeleaf.fr",
+            "https://staging.disbeleaf.fr",
+            "https://www.staging.disbeleaf.fr",
+        ];
+
         app.use(
             "/",
             // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-            cors({ origin: process.env.ORIGIN, credentials: true }),
+            cors({ origin, credentials: true }),
             express.json(),
             expressMiddleware(server, {
                 context: async ({ req }) => {
